@@ -7,7 +7,7 @@ package dataaccess;
 
 /**
  *
- * @author Chris
+ * @author Christian
  */
 public class RoleDB {
     
