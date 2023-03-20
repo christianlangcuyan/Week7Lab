@@ -1,49 +1,42 @@
 package services;
 
+import dataaccess.RoleDB;
 import dataaccess.UserDB;
-import models.Role;
 import models.User;
 import java.util.List;
-
 /**
  *
  * @author Christian
  */
 
-
 public class UserService {
 
-    private UserDB userDB;
-
-    public UserService() {
-        userDB = new UserDB();
-    }
-
     public List<User> getAll() throws Exception {
-        return userDB.getAll();
+        return new UserDB().getAll();
     }
 
     public User get(String email) throws Exception {
-        return userDB.get(email);
+        return new UserDB().get(email);
     }
 
-    public void insert(String email, String firstName, String lastName, 
-                       String password, int roleID) throws Exception {
-        Role role = new Role(roleID);
-        User user = new User(email, firstName, lastName, password, role);
-        userDB.insert(user);
+    public void insert(String email, String firstName, String lastName, String password, int roleId) throws Exception {
+        User user = new User(email, firstName, lastName, password);
+        user.setRole(new RoleDB().get(roleId));
+        new UserDB().insert(user);
     }
 
-    public void update(String email, String firstName, String lastName, 
-                       String password, int roleID) throws Exception {
-        Role role = new Role(roleID);
-        User user = new User(email, firstName, lastName, password, role);
-        userDB.update(user);
+    public void update(String email, String firstName, String lastName, String password, int roleId) throws Exception {
+        User user = new UserDB().get(email);
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setPassword(password);
+        user.setRole(new RoleDB().get(roleId));
+        new UserDB().update(user);
     }
 
     public void delete(String email) throws Exception {
-        User user = new User();
-        user.setEmail(email);
+        UserDB userDB = new UserDB();
+        User user = userDB.get(email);
         userDB.delete(user);
     }
 }
